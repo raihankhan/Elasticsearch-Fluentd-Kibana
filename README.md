@@ -95,3 +95,36 @@ helm upgrade --install kibana \
   --values ./kibana-values.yaml
 ```
 
+If you want to enable TLS, use the configuration files in `TLS` folder. Create necessary CA and signed certificates.
+
+Generate a Root CA that is valid for 10 years:
+```
+openssl req -newkey rsa:2048 -keyout ca.key -nodes -x509 -days 3650 -out ca.crt
+```
+Verify X509v3 extensions:
+```
+openssl x509 -text -noout -in ca.crt | grep CA
+```
+Create a certificate signed by the Root CA to be used with Elasticsearch and Kibana:
+```
+openssl genrsa -out tls.key 2048 && chmod 0600 tls.key
+```
+
+Generate a Certificate Sign Request (CSR):
+```
+openssl req -new -sha256 -key tls.key -out tls.csr
+```
+
+Sign the request with the Root CA:
+```
+openssl x509 -req -in tls.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out tls.crt -days 1825 -sha256
+```
+
+`Optional:` import the Root CA in to your browser.
+
+Create a k8S secret from the `ca.crt` , `tls.key` and `tls.crt` that is to be mounted in elasticsearch and kibana pods. These certificate, CA and key is going to be used for elasticsearch and Kibana TLS configurations.
+
+```
+kubectl create secret generic elastic-certificates-secret --from-file=ca.crt --from-file=tls.crt --from-file=tls.key -n demo
+```
+
