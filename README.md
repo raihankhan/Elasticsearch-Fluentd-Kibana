@@ -95,6 +95,14 @@ helm upgrade --install kibana \
   --values ./kibana-values.yaml
 ```
 
+Port forward the `kibana-kibana` service to your localhost port 5601 and hit your browser with `http://localhost:5601` to hop into kibana.
+
+```
+$ kubectl port-forward service/kibana-kibana -n demo 5601
+Forwarding from 127.0.0.1:5601 -> 5601
+Forwarding from [::1]:5601 -> 5601
+```
+
 If you want to enable TLS, use the configuration files in `TLS` folder. Create necessary CA and signed certificates.
 
 Generate a Root CA that is valid for 10 years:
