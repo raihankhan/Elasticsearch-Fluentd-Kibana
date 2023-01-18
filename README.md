@@ -1,6 +1,6 @@
 # Elasticsearch-Fluentd-Kibana (EFK)
 
-This is a simple for for deploying an Elasticsearch cluster (version 7.17.3) with Kibana in Kubernetes. A fluentd daemonSet will also be deployed that will collect logs from kubernetes containers and ship them to elasticsearch index. 
+This is a simple demonstration for for deploying an Elasticsearch cluster (version 7.17.3) with Kibana in Kubernetes. A fluentd daemonSet will also be deployed that will collect logs from kubernetes containers and ship them to elasticsearch index. 
 
 Create a namespace first. I am using demo namesapce here. 
 ```
